@@ -147,14 +147,14 @@ while time.time() - start_time < time_total:
         start_recording_time = time.time()
         timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
         filename = os.path.join(folder_path, timestamp)
-        print(f"Motion detected - total time: {time.time() - start_time}  current time: {filename} {time.time() - output.last_detection}")
+        print(f"Motion detected - total time: {int(time.time() - start_time)}  current time: {filename} {int(time.time() - output.last_detection)}")
         
         camera.split_recording(filename)
         output.motion_detected = False
         while (time.time() - output.last_detection) < time_motion_record and (time.time() - start_recording_time) < time_file_length:
             camera.wait_recording(.1)
         # check duration
-        dt = time.time() - start_recording_time
+        dt = int(time.time() - start_recording_time)
         # finish previous recording
         camera.split_recording('/dev/null')
         # rename file with duration
