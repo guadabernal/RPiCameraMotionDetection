@@ -23,10 +23,11 @@ import os
 
 folder_path = '/home/pi/videos'
 time_total = 7200
-time_motion_record = 5 
+time_motion_record = 10 
 time_file_length = 30
 camera_cols = 640
 camera_rows = 480
+framerate = 30
 i2c_bus = 10
 default_focus = 300
 motion_detection = True
@@ -130,6 +131,7 @@ focuser.set(Focuser.OPT_FOCUS, int(default_focus))
 print("Set Focus: ", focuser.get(Focuser.OPT_FOCUS))
 
 camera.resolution = (camera_cols, camera_rows)
+camera.framerate = framerate
 
 print("Start recording...")
 output = DetectMotion(camera)
@@ -139,23 +141,28 @@ start_time = time.time()
 
 # run the program until time_total 
 while time.time() - start_time < time_total:
-
-    camera.wait_recording(0.5)
-    
+    camera.wait_recording(0.1)   
     if output.motion_detected:
         
         start_recording_time = time.time()
-        filename = os.path.join(folder_path, datetime.now().strftime('%Y-%m-%d_%H-%M-%S.h264'))
+        timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+        filename = os.path.join(folder_path, timestamp)
         print(f"Motion detected - total time: {time.time() - start_time}  current time: {filename} {time.time() - output.last_detection}")
         
         camera.split_recording(filename)
         output.motion_detected = False
         while (time.time() - output.last_detection) < time_motion_record and (time.time() - start_recording_time) < time_file_length:
             camera.wait_recording(.1)
-        
+        # check duration
+        dt = time.time() - start_recording_time
+        # finish previous recording
         camera.split_recording('/dev/null')
+        # rename file with duration
+        os.rename(filename, filename + f"_{dt:08d}.h264")
+        print(f"Recording File Time = {dt:08d}")        
+
         output.motion_detected = False
-        print(f"Recording File Time = {time.time() - start_recording_time}")
+        
 
 print("Stop Recording...")
 camera.stop_recording()
