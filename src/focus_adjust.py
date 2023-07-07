@@ -110,7 +110,7 @@ print("Focus: ", focuser.get(Focuser.OPT_FOCUS))
 camera.resolution = (640, 480)
 camera.framerate = 30
 
-folder_path = 'focus'
+folder_path = '/home/pi/focus'
 if os.path.exists(folder_path):
     shutil.rmtree(folder_path)
     print(f"Folder '{folder_path}' and its contents have been deleted.")

@@ -21,7 +21,7 @@ import os
 
 # -----------------------------------------------------------------------------------------------
 
-folder_path = '/home/pi/camera/videos'
+folder_path = '/home/pi/videos'
 time_total = 7200
 time_motion_record = 5 
 time_file_length = 30
