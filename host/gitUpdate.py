@@ -13,7 +13,7 @@
 import subprocess
 
 # array of Raspberry Pi IP addresses
-rpis = ["bee01", "bee02", "bee01"]
+rpis = ["bee01", "bee02", "bee03"]
 
 # directory of git repository on Raspberry Pis
 repo_dir = "/home/pi/RPiCameraMotionDetection"
