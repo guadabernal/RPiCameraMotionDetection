@@ -1,44 +1,58 @@
+# ===============================================================================================
+# copyFiles.py
+# ===============================================================================================
+# Description: copys the saved videos onto a local directory and erases them
+#
+# Run Command: "python copyFiles.py"
+# 
+# Written By: Guadalupe Bernal 
+# Date Last Eddited: 07/07/2023
+# ===============================================================================================
+
+
 import subprocess
 import os
 import time
 
-# Array of Raspberry Pi IP addresses
-rpis = ["bee01", "bee02"]  # Add more IP addresses as needed
+# array of Raspberry Pi IP addresses, add more IP addresses as needed
+rpis = ["bee01", "bee02"]
 
-# Source directory on the Raspberry Pi
-source_dir = "~/videos"  # Replace with the actual path to the videos directory
+# source directory on the Raspberry Pi
+source_dir = "~/videos"
 
-# Destination directory on the local machine
-destination_dir = "./allvideos"  # Replace with the desired local destination directory
+# destination directory on the local machine
+destination_dir = "./allvideos"                 # REPLACE
 
 print("------------------------------------------------------------------------------------------")
 print("Downloading...")
 print("------------------------------------------------------------------------------------------")
 
-# SCP the content of the video folder from each Raspberry Pi
+# SCP the content of video folder from each Raspberry Pi
 for rpi in rpis:
+    
     print(f"{rpi}")
     print(f"  Calculating the number of files and total size to be copied...")
     
-    # Construct the SSH command to get the file count
+    # construct the SSH command to get the file count
     ssh_command = f'ssh {rpi} "find {source_dir} -type f | wc -l"'
 
     try:
-        # Run the SSH command to get the file count
+        # run the SSH command to get the file count
         process = subprocess.run(ssh_command, shell=True, capture_output=True, text=True)
         file_count = int(process.stdout.strip())
     except:
         print(f"   Error accessing {rpi}")
         continue
 
-    # Construct the SSH command to get the total size
+    # construct the SSH command to get the total size
     ssh_command = f'ssh {rpi} "du -bs {source_dir} | awk \'{{print $1}}\'"'
-    # Run the SSH command to get the total size
+
+    # run the SSH command to get the total size
     process = subprocess.run(ssh_command, shell=True, capture_output=True, text=True)
     total_size_output = process.stdout.strip()
     total_size = int(total_size_output) if total_size_output else 0
 
-    # Estimate the copy time
+    # estimate the copy time
     copy_time = total_size / (1 * 1024 * 1024)  # Assuming average transfer rate of 1 MB/s
 
     print(f"  Number of files to be copied: {file_count}")
@@ -47,21 +61,21 @@ for rpi in rpis:
 
     print(f"  Copying files from {rpi}:{source_dir} to {destination_dir}/{rpi} folder on the local machine")
 
-    # Create the destination directory if it doesn't exist
+    # create the destination directory if it doesn't exist
     dd = f"{destination_dir}/{rpi}"
     os.makedirs(dd, exist_ok=True)
 
     start_time = time.time()
 
-    # Construct the SCP command
+    # construct the SCP command
     scp_command = f'scp -r {rpi}:{source_dir}/* {destination_dir}/{rpi}'
 
-    # Run the SCP command using subprocess
+    # run the SCP command using subprocess
     process = subprocess.run(scp_command, shell=True, capture_output=True, text=True)
 
     end_time = time.time()
 
-    # Print the output of the SCP command
+    # print output of the SCP command
     if process.returncode == 0:
         print(f"  Files from {rpi} copied successfully to {rpi} folder on the local machine")
         print(f"  Actual copy time: {end_time - start_time:.2f} seconds")

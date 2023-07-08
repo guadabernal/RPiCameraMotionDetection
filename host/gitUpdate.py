@@ -1,9 +1,21 @@
+# ===============================================================================================
+# gitUpdate.py
+# ===============================================================================================
+# Description: updates the code all of the listed raspberry Pi's to the corrent github version
+#
+# Run Command: "python gitUpdate.py"
+# 
+# Written By: Guadalupe Bernal 
+# Date Last Eddited: 07/07/2023
+# ===============================================================================================
+
+
 import subprocess
 
-# Array of Raspberry Pi IP addresses
+# array of Raspberry Pi IP addresses
 rpis = ["bee01", "bee02", "bee01"]
 
-# Directory of the git repository on the Raspberry Pis
+# directory of git repository on Raspberry Pis
 repo_dir = "/home/pi/RPiCameraMotionDetection"
 
 # SSH username
@@ -13,13 +25,13 @@ username = "pi"
 for rpi in rpis:
     print(f"Pulling latest code from repository on Raspberry Pi at {rpi}")
 
-    # Construct the SSH command
+    # construct the SSH command
     ssh_command = f'ssh {username}@{rpi} "cd {repo_dir} && git pull"'
 
-    # Run the SSH command using subprocess
+    # run the SSH command using subprocess
     process = subprocess.run(ssh_command, shell=True, capture_output=True, text=True)
 
-    # Print the output of the git pull command
+    # print the output of the git pull command
     if process.returncode == 0:
         print(process.stdout.strip())
     else:
