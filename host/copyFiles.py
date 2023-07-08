@@ -23,6 +23,21 @@ source_dir = "~/videos"
 # destination directory on the local machine
 destination_dir = "./allvideos"                 # REPLACE
 
+
+print("------------------------------------------------------------------------------------------")
+print("Stop recording...")
+print("------------------------------------------------------------------------------------------")
+
+for rpi in rpis:
+    print(f"{rpi}")
+     # construct the SSH command to get the file count
+    ssh_command = f'ssh {rpi} "~/stop_recording.sh"'
+    try:
+        # run the SSH command to get the file count
+        process = subprocess.run(ssh_command, shell=True, capture_output=True, text=True)
+    except:
+        print(f"   Error accessing {rpi}")
+        continue
 print("------------------------------------------------------------------------------------------")
 print("Downloading...")
 print("------------------------------------------------------------------------------------------")
@@ -32,7 +47,7 @@ for rpi in rpis:
     
     print(f"{rpi}")
     print(f"  Calculating the number of files and total size to be copied...")
-    
+
     # construct the SSH command to get the file count
     ssh_command = f'ssh {rpi} "find {source_dir} -type f | wc -l"'
 
@@ -41,7 +56,11 @@ for rpi in rpis:
         process = subprocess.run(ssh_command, shell=True, capture_output=True, text=True)
         file_count = int(process.stdout.strip())
     except:
-        print(f"   Error accessing {rpi}")
+        print(f"  Error accessing {rpi}")
+        continue
+    
+    if file_count == 0:
+        print("  Error No files in the folder")
         continue
 
     # construct the SSH command to get the total size
