@@ -21,7 +21,7 @@ import shutil
 import os
 
 # -----------------------------------------------------------------------------------------------
-
+# General setings
 folder_path = '/home/pi/videos'
 time_total = 7200
 time_motion_record = 10 
@@ -32,7 +32,10 @@ framerate = 30
 i2c_bus = 10
 default_focus = 300
 motion_detection = True
-
+# -----------------------------------------------------------------------------------------------
+# Motion sensitivity
+motion_vectors_norm = 80
+motion_density = 100      # number of pixels with |mvecs| > 80
 # -----------------------------------------------------------------------------------------------
 
 
@@ -116,7 +119,8 @@ class DetectMotion(picamera.array.PiMotionAnalysis):
             np.square(a['y'].astype(float))
         ).clip(0, 255).astype(np.uint8)
 
-        if (not motion_detection) or ((a > 60).sum() > 10):
+        
+        if (not motion_detection) or ((a > motion_vectors_norm).sum() > motion_density):
             self.motion_detected = True
             self.last_detection = time.time()
             # Only log if at least 1 second has passed since the last log
