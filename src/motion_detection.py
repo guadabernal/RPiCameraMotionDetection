@@ -3,11 +3,11 @@
 # ===============================================================================================
 # Description: Runs on startup and when called. Given the parameters at the top of the file, it
 # collects data when motion is detected. Time units in seconds. Does not erase previous folder
-# only adds to it. 
+# only adds to it.
 #
 # Run Command: "python motion_detection.py
-# 
-# Written By: Guadalupe Bernal 
+#
+# Written By: Guadalupe Bernal
 # Date Last Eddited: 07/06/2023
 # ===============================================================================================
 
@@ -24,7 +24,7 @@ import os
 # General setings
 folder_path = '/home/pi/videos'
 time_total = 7200
-time_motion_record = 10 
+time_motion_record = 10
 time_file_length = 30
 camera_cols = 640
 camera_rows = 480
@@ -34,8 +34,8 @@ default_focus = 300
 motion_detection = True
 # -----------------------------------------------------------------------------------------------
 # Motion sensitivity
-motion_vectors_norm = 80
-motion_density = 100      # number of pixels with |mvecs| > 80
+motion_vectors_norm = 60
+motion_density = 50      # number of pixels with |mvecs| > 50
 # -----------------------------------------------------------------------------------------------
 
 
@@ -56,7 +56,7 @@ class Focuser:
         self.bus = bus
         self.verbose = False
         init(self.bus, self.CHIP_I2C_ADDR)
-        
+
     def read(self):
         return self.focus_value
 
@@ -105,8 +105,8 @@ class Focuser:
 # Set up logging
 if not os.path.exists(folder_path):
     os.makedirs(folder_path)
-    
-logging.basicConfig(filename=os.path.join(folder_path,'motion.log'), level=logging.INFO, 
+
+logging.basicConfig(filename=os.path.join(folder_path,'motion.log'), level=logging.INFO,
                     format='%(asctime)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
 class DetectMotion(picamera.array.PiMotionAnalysis):
@@ -122,7 +122,7 @@ class DetectMotion(picamera.array.PiMotionAnalysis):
             np.square(a['y'].astype(float))
         ).clip(0, 255).astype(np.uint8)
 
-        
+
         if (not motion_detection) or ((a > motion_vectors_norm).sum() > motion_density):
             self.motion_detected = True
             self.last_detection = time.time()
@@ -156,16 +156,16 @@ camera.start_recording('/dev/null', format='h264', motion_output=output)
 
 start_time = time.time()
 
-# run the program until time_total 
+# run the program until time_total
 while time.time() - start_time < time_total:
-    camera.wait_recording(0.1)   
+    camera.wait_recording(0.1)
     if output.motion_detected:
-        
+
         start_recording_time = time.time()
         timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
         filename = os.path.join(folder_path, timestamp)
         print(f"Motion detected - total time: {int(time.time() - start_time)}  current time: {filename} {int(time.time() - output.last_detection)}")
-        
+
         camera.split_recording(filename)
         output.motion_detected = False
         while (time.time() - output.last_detection) < time_motion_record and (time.time() - start_recording_time) < time_file_length:
@@ -176,10 +176,10 @@ while time.time() - start_time < time_total:
         camera.split_recording('/dev/null')
         # rename file with duration
         os.rename(filename, filename + f"_{dt:08d}.h264")
-        print(f"Recording File Time = {dt:08d}")        
+        print(f"Recording File Time = {dt:08d}")
 
         output.motion_detected = False
-        
+
 
 print("Stop Recording...")
 camera.stop_recording()
