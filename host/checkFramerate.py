@@ -4,8 +4,8 @@
 # Description: outputs the fps of the video files in a directory
 #
 # Run Command: "python checkFramerate.py"
-# 
-# Written By: Guadalupe Bernal 
+#
+# Written By: Guadalupe Bernal
 # Date Last Eddited: 07/07/2023
 # ===============================================================================================
 

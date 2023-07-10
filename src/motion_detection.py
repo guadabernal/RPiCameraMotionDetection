@@ -31,9 +31,9 @@ camera_rows = 480
 framerate = 30
 i2c_bus = 10
 default_focus = 300
+camera_timestamp = False
 # -----------------------------------------------------------------------------------------------
 # Motion sensitivity
-motion_detection = True
 motion_vectors_norm = 60    # mvecs norm
 motion_density = 50         # number of pixels with |mvecs| > motion_density
 motion_min_log_time = 1     # seconds
@@ -123,8 +123,7 @@ class DetectMotion(picamera.array.PiMotionAnalysis):
             np.square(a['y'].astype(float))
         ).clip(0, 255).astype(np.uint8)
 
-
-        if (not motion_detection) or ((a > motion_vectors_norm).sum() > motion_density):
+        if (a > motion_vectors_norm).sum() > motion_density:
             self.motion_detected = True
             self.last_detection = time.time()
             # Only log if at least 1 second has passed since the last log
@@ -165,11 +164,14 @@ while time.time() - start_time < time_total:
         start_recording_time = time.time()
         timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
         filename = os.path.join(folder_path, timestamp)
-        print(f"Motion detected - total time: {int(time.time() - start_time)}  current time: {filename} {int(time.time() - output.last_detection)}")
+        print(f"Motion detected - total time: {int(time.time() - start_time)} - current time: {filename} {int(time.time() - output.last_detection)}")
 
         camera.split_recording(filename)
         output.motion_detected = False
         while (time.time() - output.last_detection) < time_motion_record and (time.time() - start_recording_time) < time_file_length:
+            if camera_timestamp:
+                camera.annotate_text = datetime.now().strftime('%Y-%m-%d %H-%M-%S')
+                camera.wait_recording(.1)
             camera.wait_recording(.1)
         # check duration
         dt = int(time.time() - start_recording_time)

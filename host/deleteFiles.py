@@ -4,8 +4,8 @@
 # Description: copys the saved videos onto a local directory and erases them
 #
 # Run Command: "python deleteFiles.py"
-# 
-# Written By: Guadalupe Bernal 
+#
+# Written By: Guadalupe Bernal
 # Date Last Eddited: 07/07/2023
 # ===============================================================================================
 

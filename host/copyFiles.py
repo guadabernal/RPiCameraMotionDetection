@@ -4,8 +4,8 @@
 # Description: copys the saved videos onto a local directory and erases them
 #
 # Run Command: "python copyFiles.py"
-# 
-# Written By: Guadalupe Bernal 
+#
+# Written By: Guadalupe Bernal
 # Date Last Eddited: 07/07/2023
 # ===============================================================================================
 
@@ -44,7 +44,7 @@ print("-------------------------------------------------------------------------
 
 # SCP the content of video folder from each Raspberry Pi
 for rpi in rpis:
-    
+
     print(f"{rpi}")
     print(f"  Calculating the number of files and total size to be copied...")
 
@@ -58,7 +58,7 @@ for rpi in rpis:
     except:
         print(f"  Error accessing {rpi}")
         continue
-    
+
     if file_count == 0:
         print("  Error No files in the folder")
         continue

@@ -4,8 +4,8 @@
 # Description: updates the code all of the listed raspberry Pi's to the corrent github version
 #
 # Run Command: "python gitUpdate.py"
-# 
-# Written By: Guadalupe Bernal 
+#
+# Written By: Guadalupe Bernal
 # Date Last Eddited: 07/07/2023
 # ===============================================================================================
 

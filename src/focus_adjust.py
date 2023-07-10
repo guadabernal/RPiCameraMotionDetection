@@ -1,13 +1,13 @@
 # ===============================================================================================
 # focus_adjust.py
 # ===============================================================================================
-# Description: Runs over range of focus values storing results in folder called "focus" in the 
+# Description: Runs over range of focus values storing results in folder called "focus" in the
 # directory program was run on RPiW0 with the Arducam Motorized Focus Pi Camera OV5647 5MP 1080P
 # Erases previous folder.
 #
 # Run Command: "python focus_adjust.py -i 10"
-# 
-# Written By: Guadalupe Bernal 
+#
+# Written By: Guadalupe Bernal
 # Date Last Eddited: 07/06/2023
 # ===============================================================================================
 
@@ -38,7 +38,7 @@ class Focuser:
         self.bus = bus
         self.verbose = False
         init(self.bus, self.CHIP_I2C_ADDR)
-        
+
     def read(self):
         return self.focus_value
 
@@ -87,7 +87,7 @@ class Focuser:
 
 def parse_cmdline():
     parser = argparse.ArgumentParser(description='Arducam Controller.')
-    parser.add_argument('-i', '--i2c-bus', type=int, nargs=None, required=True,
+    parser.add_argument('-i', '--i2c-bus', type=int, nargs=None, required=True, default=10,
                         help='Set i2c bus. For arducam + raspberry pi zero W use -i 10')
     return parser.parse_args()
 
@@ -96,7 +96,7 @@ def parse_cmdline():
 # -----------------------------------------------------------------------------------------------
 
 args = parse_cmdline()
- 
+
 # Create an instance of the PiCamera class
 print("Camera initialization")
 camera = picamera.PiCamera()
@@ -123,14 +123,14 @@ step_size = 10
 # iterate through different focus values for 5 seconds each
 # and store each in a file
 for focus in range(start_focus, end_focus, step_size):
-    
+
     focuser.set(Focuser.OPT_FOCUS, int(focus))
     print("Focus: ", focuser.get(Focuser.OPT_FOCUS))
-    
+
     filename = os.path.join(folder_path,f'video_{focus:04d}.h264')
     camera.start_recording(filename)
     print(f"Start recording ... {filename}")
-    
+
     # record for 5 seconds
     camera.wait_recording(5)
     camera.stop_recording()

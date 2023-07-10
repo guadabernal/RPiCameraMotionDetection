@@ -4,8 +4,8 @@
 # Description: Records a one minute file called video.h264 at the set resolution and framerate
 #
 # Run Command: "python focus_adjust.py -i 10"
-# 
-# Written By: Guadalupe Bernal 
+#
+# Written By: Guadalupe Bernal
 # Date Last Eddited: 07/06/2023
 # ===============================================================================================
 
