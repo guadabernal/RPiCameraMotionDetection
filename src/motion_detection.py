@@ -16,6 +16,7 @@ import picamera.array
 import numpy as np
 import time
 from datetime import datetime
+import logging
 import shutil
 import os
 
@@ -98,11 +99,16 @@ class Focuser:
         if self.verbose:
             print("write: {}".format(value))
 
+# Set up logging
+logging.basicConfig(filename=os.path.join(folder_path,'motion.log'), level=logging.INFO, 
+                    format='%(asctime)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+
 class DetectMotion(picamera.array.PiMotionAnalysis):
     def __init__(self, camera):
         super(DetectMotion, self).__init__(camera)
         self.motion_detected = False
         self.last_detection = time.time()
+        self.last_logged = time.time()  # Add this line
 
     def analyse(self, a):
         a = np.sqrt(
@@ -113,6 +119,10 @@ class DetectMotion(picamera.array.PiMotionAnalysis):
         if (not motion_detection) or ((a > 60).sum() > 10):
             self.motion_detected = True
             self.last_detection = time.time()
+            # Only log if at least 1 second has passed since the last log
+            if self.last_detection - self.last_logged >= 1:
+                logging.info('Motion detected')  # Log the detection
+                self.last_logged = self.last_detection  # Update the last logged time
 
 # -----------------------------------------------------------------------------------------------
 
