@@ -31,11 +31,12 @@ camera_rows = 480
 framerate = 30
 i2c_bus = 10
 default_focus = 300
-motion_detection = True
 # -----------------------------------------------------------------------------------------------
 # Motion sensitivity
-motion_vectors_norm = 60
-motion_density = 50      # number of pixels with |mvecs| > 50
+motion_detection = True
+motion_vectors_norm = 60    # mvecs norm
+motion_density = 50         # number of pixels with |mvecs| > motion_density
+motion_min_log_time = 1     # seconds
 # -----------------------------------------------------------------------------------------------
 
 
@@ -127,7 +128,7 @@ class DetectMotion(picamera.array.PiMotionAnalysis):
             self.motion_detected = True
             self.last_detection = time.time()
             # Only log if at least 1 second has passed since the last log
-            if self.last_detection - self.last_logged >= 1:
+            if self.last_detection - self.last_logged >= motion_min_log_time:
                 logging.info('Motion detected')  # Log the detection
                 self.last_logged = self.last_detection  # Update the last logged time
 
