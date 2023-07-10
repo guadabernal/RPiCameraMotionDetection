@@ -103,6 +103,9 @@ class Focuser:
             print("write: {}".format(value))
 
 # Set up logging
+if not os.path.exists(folder_path):
+    os.makedirs(folder_path)
+    
 logging.basicConfig(filename=os.path.join(folder_path,'motion.log'), level=logging.INFO, 
                     format='%(asctime)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
