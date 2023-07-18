@@ -1,9 +1,7 @@
 # ===============================================================================================
-# motion_detection.py
+# motion_detection_enabled.py
 # ===============================================================================================
-# Description: Runs on startup and when called. Given the parameters at the top of the file, it
-# collects data. Time units in seconds. Does not erase previous folder
-# only adds to it.
+# Description: temporarily storing the motion detection code here
 #
 # Run Command: "python motion_detection.py
 #
@@ -24,12 +22,14 @@ import os
 # General setings
 folder_path = '/home/pi/videos'
 time_total = 7200
+time_motion_record = 10
+time_file_length = 30
 camera_cols = 640
 camera_rows = 480
 framerate = 30
 i2c_bus = 10
 default_focus = 300
-camera_timestamp = True
+camera_timestamp = False
 # -----------------------------------------------------------------------------------------------
 # Motion sensitivity
 motion_vectors_norm = 60    # mvecs norm
@@ -150,28 +150,41 @@ camera.framerate = framerate
 
 print("Start recording...")
 output = DetectMotion(camera)
+camera.start_recording('/dev/null', format='h264', motion_output=output)
 
-timestamp   = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-filename    = os.path.join(folder_path, timestamp)
-start_time  = time.time()
+start_time = time.time()
 
-camera.start_recording(filename, format='h264', motion_output=output)
-
-print(f"Beginning Recording - Current time: {filename} {int(time.time())}")
-
+# run the program until time_total
 while time.time() - start_time < time_total:
     camera.wait_recording(0.1)
-    if camera_timestamp:
-        camera.annotate_text_size = 16
-        camera.annotate_text = datetime.now().strftime('%Y-%m-%d %H-%M-%S')
+    if output.motion_detected:
 
-dt = int(time.time() - start_time)        # check duration
+        start_recording_time = time.time()
+        timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+        filename = os.path.join(folder_path, timestamp)
+        print(f"Motion detected - total time: {int(time.time() - start_time)} - current time: {filename} {int(time.time() - output.last_detection)}")
 
-print(f"Recording File Time = {dt:08d}")
-print("Stopping Recording...")
+        camera.split_recording(filename)
+        output.motion_detected = False
+        while (time.time() - output.last_detection) < time_motion_record and (time.time() - start_recording_time) < time_file_length:
+            if camera_timestamp:
+                camera.annotate_text = datetime.now().strftime('%Y-%m-%d %H-%M-%S')
+                camera.wait_recording(.1)
+            camera.wait_recording(.1)
+        # check duration
+        dt = int(time.time() - start_recording_time)
+        # finish previous recording
+        camera.split_recording('/dev/null')
+        # rename file with duration
+        os.rename(filename, filename + f"_{dt:08d}.h264")
+        print(f"Recording File Time = {dt:08d}")
+
+        output.motion_detected = False
+
+
+print("Stop Recording...")
 camera.stop_recording()
 
-os.rename(filename, filename + f"_{dt:08d}.h264")   # rename file with duration
 
 
 
