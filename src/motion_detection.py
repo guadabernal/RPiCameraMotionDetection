@@ -23,7 +23,7 @@ import os
 # -----------------------------------------------------------------------------------------------
 # General setings
 folder_path = '/home/pi/videos'
-time_total = 7200
+time_total = 120
 camera_cols = 640
 camera_rows = 480
 framerate = 30
