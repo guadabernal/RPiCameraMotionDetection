@@ -172,6 +172,8 @@ camera.stop_recording()
 
 os.rename(filename, filename + f"_{dt:08d}.h264")   # rename file with duration
 
+while True:
+   time.sleep(0.5)
 
 
 
