@@ -155,15 +155,14 @@ timestamp   = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
 filename    = os.path.join(folder_path, timestamp)
 start_time  = time.time()
 
+camera.annotate_text_size = 16
 camera.start_recording(filename, format='h264', motion_output=output)
 
 print(f"Beginning Recording - Current time: {filename} {int(time.time())}")
 
 while time.time() - start_time < time_total:
-    camera.wait_recording(0.1)
-    if camera_timestamp:
-        camera.annotate_text_size = 16
-        camera.annotate_text = datetime.now().strftime('%Y-%m-%d %H-%M-%S')
+    camera.annotate_text = datetime.now().strftime('%Y-%m-%d %H-%M-%S')
+    camera.wait_recording(0.01)
 
 dt = int(time.time() - start_time)        # check duration
 
