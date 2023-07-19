@@ -15,7 +15,7 @@ import os
 from datetime import datetime
 
 # directory containing the videos
-video_dir = 'E:/bees/rpi/videos'
+video_dir = 'E:/bees/videoTemp'
 
 # iterate over each file in the video directory
 for filename in os.listdir(video_dir):
@@ -44,7 +44,7 @@ for filename in os.listdir(video_dir):
         # calculate frame rate
         frame_rate = frame_count / duration
 
-        print(f'Filename: {filename}, Frame Rate: {frame_rate} fps, Frame Count: {frame_count}')
+        print(f'Filename: {filename}, Duration: {duration}, Frame Rate: {frame_rate} fps, Frame Count: {frame_count}')
 
         # release video file
         video.release()
