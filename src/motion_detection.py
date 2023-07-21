@@ -169,7 +169,7 @@ dt = int(time.time() - start_time)        # check duration
 print(f"Recording File Time = {dt:08d}")
 print("Stopping Recording...")
 camera.stop_recording()
-
+camera.close()
 os.rename(filename, filename + f"_{dt:08d}.h264")   # rename file with duration
 
 while True:
