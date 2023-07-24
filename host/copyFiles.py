@@ -1,7 +1,7 @@
 # ===============================================================================================
 # copyFiles.py
 # ===============================================================================================
-# Description: copys the saved videos onto a local directory and erases them
+# Description: copies the saved videos onto a local directory and erases them
 #
 # Run Command: "python copyFiles.py"
 #
