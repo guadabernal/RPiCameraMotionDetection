@@ -14,8 +14,17 @@ import subprocess
 import os
 import time
 
+def read_config_file(file_path):
+    with open(file_path, 'r') as config_file:
+        config_data = json.load(config_file)
+    return config_data
+
+# Assuming 'config.json' is in the same directory as the script.
+# Modify the file path accordingly if it's located elsewhere.
+config_data = read_config_file("config.json")
+
 # array of Raspberry Pi IP addresses, add more IP addresses as needed
-rpis = ["bee01", "bee02"]
+rpis = config_data["rpis"]
 
 # source directory on the Raspberry Pi
 source_dir = "~/videos"

@@ -1,5 +1,5 @@
 {
-    "rpis": ["bee01", "bee02", "beexx"],
+    "rpis": ["bee01", "bee02", "bee11", "bee12"],
     "motion_mode": "enabled",
     "focus": "auto"
 }

@@ -32,7 +32,7 @@ print("-------------------------------------------------------------------------
 for rpi in rpis:
     print(f"{rpi}")
      # construct the SSH command to get the file count
-    ssh_command = f'ssh pi@{rpi} "~/stop_recording.sh"'
+    ssh_command = f'ssh pi@{rpi}.local "~/stop_recording.sh"'
     try:
         # run the SSH command to get the file count
         process = subprocess.run(ssh_command, shell=True, capture_output=True, text=True)

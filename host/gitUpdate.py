@@ -11,9 +11,19 @@
 
 
 import subprocess
+import json
 
-# array of Raspberry Pi IP addresses
-rpis = ["bee01", "bee02", "bee03"]
+def read_config_file(file_path):
+    with open(file_path, 'r') as config_file:
+        config_data = json.load(config_file)
+    return config_data
+
+# Assuming 'config.json' is in the same directory as the script.
+# Modify the file path accordingly if it's located elsewhere.
+config_data = read_config_file("config.json")
+
+# array of Raspberry Pi IP addresses, add more IP addresses as needed
+rpis = config_data["rpis"]
 
 # directory of git repository on Raspberry Pis
 repo_dir = "/home/pi/RPiCameraMotionDetection"
@@ -26,7 +36,8 @@ for rpi in rpis:
     print(f"Pulling latest code from repository on Raspberry Pi at {rpi}")
 
     # construct the SSH command
-    ssh_command = f'ssh {username}@{rpi} "cd {repo_dir} && git pull"'
+    # ssh_command = f'ssh {username}@{rpi} "cd {repo_dir} && git stash"'
+    ssh_command = f'ssh {username}@{rpi}.local "cd {repo_dir} && git pull"'
 
     # run the SSH command using subprocess
     process = subprocess.run(ssh_command, shell=True, capture_output=True, text=True)
