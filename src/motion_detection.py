@@ -8,7 +8,7 @@
 # Run Command: "python motion_detection.py
 #
 # Written By: Guadalupe Bernal
-# Date Last Eddited: 07/06/2023
+# Date Last Eddited: 07/26/2023
 # ===============================================================================================
 
 import picamera
@@ -23,7 +23,7 @@ import os
 # -----------------------------------------------------------------------------------------------
 # General setings
 folder_path = '/home/pi/videos'
-time_total = 120
+time_total = 1800
 camera_cols = 640
 camera_rows = 480
 framerate = 30
@@ -32,7 +32,7 @@ default_focus = 300
 camera_timestamp = True
 # -----------------------------------------------------------------------------------------------
 # Motion sensitivity
-motion_vectors_norm = 60    # mvecs norm
+motion_vectors_norm = 40    # mvecs norm
 motion_density = 50         # number of pixels with |mvecs| > motion_density
 motion_min_log_time = 1     # seconds
 # -----------------------------------------------------------------------------------------------
