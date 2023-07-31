@@ -32,8 +32,11 @@ rpis = config_data["rpis"]
 source_dir = "~/videos"
 
 # destination directory on the local machine
-destination_dir = "./VideosTrial1"                 # REPLACE
+destination_dir = "pi@10.0.0.1:~/videos"
 
+box_dir = "Napp Lab/Bee Entrance Data/BeeMonitoring/"
+
+# rclone copy . --include "*"  box:"Napp Lab/Bee Entrance Data/BeeMonitoring/2023_TRIAL_01" 
 
 print("------------------------------------------------------------------------------------------")
 print("Stop recording...")
@@ -57,6 +60,7 @@ for rpi in rpis:
     except:
         print(f"   Error accessing {rpi}")
         continue
+
 
 print("------------------------------------------------------------------------------------------")
 print("Downloading...")
@@ -100,16 +104,16 @@ for rpi in rpis:
     print(f"  Total size to be copied: {total_size} bytes")
     print(f"  Estimated copy time: {copy_time:.2f} seconds assuming 10Mb/s")
 
-    print(f"  Copying files from {ssh_addr}:{source_dir} to {destination_dir}/{rpi} folder on the local machine")
+    print(f"  Copying files from {ssh_addr}:{source_dir} to {destination_dir} folder on the local machine")
 
     # create the destination directory if it doesn't exist
-    dd = f"{destination_dir}/{rpi}"
+    dd = f"{destination_dir}"
     os.makedirs(dd, exist_ok=True)
 
     start_time = time.time()
 
     # construct the SCP command
-    scp_command = f'scp -r {ssh_addr}:{source_dir}/* {destination_dir}/{rpi}'
+    scp_command = f'scp -r {ssh_addr}:{source_dir}/* {destination_dir}'
 
     # run the SCP command using subprocess
     process = subprocess.run(scp_command, shell=True, capture_output=True, text=True)
