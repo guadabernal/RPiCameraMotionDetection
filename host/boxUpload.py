@@ -71,8 +71,8 @@ start_time = time.time()
 # construct the SCP command
 
 
-# box_dir = "Napp Lab/Bee Entrance Data/BeeMonitoring/2023_TRIAL_02"
-box_dir = "Napp Lab/Bee Entrance Data/BeeMonitoring/2023_TRIAL_01/testingVideos2"
+box_dir = "Napp Lab/Bee Entrance Data/BeeMonitoring/2023_TRIAL_02"
+# box_dir = "Napp Lab/Bee Entrance Data/BeeMonitoring/2023_TRIAL_01/testingVideos2"
 
 print(box_dir)
 cpy_command = f'cd {source_dir} && rclone copy . --include "*"  box:"{box_dir}"'
