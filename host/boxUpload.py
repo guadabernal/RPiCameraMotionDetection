@@ -92,3 +92,14 @@ else:
     print("  " + process.stderr.strip())
 
 print("------------------------------------------------------------------------------------------")
+
+ssh_command = f'ssh {ssh_addr} "cd {source_dir} && rm -rf *"'
+
+# run the SSH command using subprocess
+process = subprocess.run(ssh_command, shell=True, capture_output=True, text=True)
+
+# print the output of the git pull command
+if process.returncode == 0:
+    print(process.stdout.strip())
+else:
+    print(process.stderr.strip())
