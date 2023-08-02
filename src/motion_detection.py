@@ -24,7 +24,7 @@ import socket
 # -----------------------------------------------------------------------------------------------
 # General setings
 folder_path = '/home/pi/videos'
-time_total = 30
+time_total = 10
 camera_cols = 640
 camera_rows = 480
 framerate = 30
@@ -161,7 +161,7 @@ print("Start recording...")
 output = DetectMotion(camera)
 
 timestamp   = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-filename    = os.path.join(folder_path, timestamp)
+filename    = os.path.join(folder_path, f"{pi_number}_{timestamp}")
 start_time  = time.time()
 
 camera.annotate_text_size = 16
