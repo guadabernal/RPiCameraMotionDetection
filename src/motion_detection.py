@@ -19,20 +19,23 @@ from datetime import datetime
 import logging
 import shutil
 import os
+import socket
 
 # -----------------------------------------------------------------------------------------------
 # General setings
 folder_path = '/home/pi/videos'
-time_total = 16200
+time_total = 30
 camera_cols = 640
 camera_rows = 480
 framerate = 30
 i2c_bus = 10
 default_focus = 300
 camera_timestamp = True
+pi_name = socket.gethostname()
+pi_number = ''.join(filter(str.isdigit, pi_name))
 # -----------------------------------------------------------------------------------------------
 # Motion sensitivity
-motion_vectors_norm = 40    # mvecs norm
+motion_vectors_norm = 48    # mvecs norm
 motion_density = 50         # number of pixels with |mvecs| > motion_density
 motion_min_log_time = 1     # seconds
 # -----------------------------------------------------------------------------------------------
@@ -40,6 +43,9 @@ motion_min_log_time = 1     # seconds
 
 def init(bus, address):
     os.system("i2cset -y {} 0x{:02x} 0x02 0x00".format(bus, address))
+
+def get_current_datetime():
+    return datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
 
 def write(bus, address, value):
     value_high = (value >> 4) & 0x3F
@@ -101,12 +107,15 @@ class Focuser:
         if self.verbose:
             print("write: {}".format(value))
 
-# Set up logging
 if not os.path.exists(folder_path):
     os.makedirs(folder_path)
 
-logging.basicConfig(filename=os.path.join(folder_path,'motion.log'), level=logging.INFO,
-                    format='%(asctime)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+
+motion_filename = os.path.join(folder_path, f'{pi_number}_{get_current_datetime()}.log')
+
+logging.basicConfig(filename=motion_filename, level=logging.INFO, format='%(asctime)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+
+logging.basicConfig(filename=os.path.join(folder_path,'motion.log'), level=logging.INFO, format='%(asctime)s %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 
 class DetectMotion(picamera.array.PiMotionAnalysis):
     def __init__(self, camera):
