@@ -24,7 +24,7 @@ import socket
 # -----------------------------------------------------------------------------------------------
 # General setings
 folder_path = '/home/pi/videos'
-time_total = 10
+time_total = 3600
 camera_cols = 640
 camera_rows = 480
 framerate = 30
