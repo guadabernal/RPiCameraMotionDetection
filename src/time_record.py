@@ -26,6 +26,6 @@ camera.start_recording('video.h264')
 print("Start recording")
 
 # record for one minute
-camera.wait_recording(5)
+camera.wait_recording(30)
 camera.stop_recording()
 camera.close()
