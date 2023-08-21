@@ -19,13 +19,13 @@ print("Camera Created")
 
 # set resolution and frame rate of the camera
 camera.resolution = (640, 480)
-camera.framerate = 15
+camera.framerate = 30
 
 # start recording
 camera.start_recording('video.h264')
 print("Start recording")
 
 # record for one minute
-camera.wait_recording(10)
+camera.wait_recording(5)
 camera.stop_recording()
 camera.close()
