@@ -24,7 +24,7 @@ import socket
 # -----------------------------------------------------------------------------------------------
 # General setings
 folder_path = '/home/pi/videos'
-time_total = 21600
+time_total = 10
 camera_cols = 640
 camera_rows = 480
 framerate = 30
@@ -147,15 +147,18 @@ print("Initializing Camera...")
 camera = picamera.PiCamera()
 print("Camera Initialized")
 
-focuser = Focuser(i2c_bus)
-focuser.reset(Focuser.OPT_FOCUS)
-print("Initial Focus: ", focuser.get(Focuser.OPT_FOCUS))
+# focuser = Focuser(i2c_bus)
+# focuser.reset(Focuser.OPT_FOCUS)
+# print("Initial Focus: ", focuser.get(Focuser.OPT_FOCUS))
 
-focuser.set(Focuser.OPT_FOCUS, int(default_focus))
-print("Set Focus: ", focuser.get(Focuser.OPT_FOCUS))
+# focuser.set(Focuser.OPT_FOCUS, int(default_focus))
+# print("Set Focus: ", focuser.get(Focuser.OPT_FOCUS))
 
-camera.resolution = (camera_cols, camera_rows)
-camera.framerate = framerate
+# camera.resolution = (camera_cols, camera_rows)
+# camera.framerate = framerate
+
+camera.resolution = (1920, 1080)
+camera.framerate = 30
 
 print("Start recording...")
 output = DetectMotion(camera)
