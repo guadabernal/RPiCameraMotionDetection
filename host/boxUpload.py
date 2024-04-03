@@ -1,12 +1,12 @@
 # ===============================================================================================
-# copyFiles.py
+# boxUpload.py
 # ===============================================================================================
-# Description: copies the saved videos onto a local directory and erases them
+# Description: uploads the videos from the local to the box
 #
-# Run Command: "python copyFiles.py"
+# Run Command: "python boxUpload.py"
 #
 # Written By: Guadalupe Bernal
-# Date Last Eddited: 07/07/2023
+# Date Last Eddited: 04/03/2024
 # ===============================================================================================
 
 
@@ -16,14 +16,16 @@ import time
 import json
 import re
 
+# Change this location, determines where the files are uploaded to:
+box_dir = "Napp Lab/Bee Entrance Data/BeeMonitoring/2023_TRIAL_01"
+
+
 # source directory on the Raspberry Pi
 source_dir = "~/videos"
 
 # destination directory on the local machine
 destination_dir = "pi@10.0.0.1:~/videos"
 ssh_addr = "pi@10.0.0.1"
-
-box_dir = "Napp Lab/Bee Entrance Data/BeeMonitoring/2023_TRIAL_01"
 
 print("------------------------------------------------------------------------------------------")
 print("Uploading...")
@@ -70,9 +72,6 @@ start_time = time.time()
 
 # construct the SCP command
 
-
-box_dir = "Napp Lab/Bee Entrance Data/BeeMonitoring/2023_TRIAL_02"
-# box_dir = "Napp Lab/Bee Entrance Data/BeeMonitoring/2023_TRIAL_01/testingVideos2"
 
 print(box_dir)
 cpy_command = f'cd {source_dir} && rclone copy . --include "*"  box:"{box_dir}"'
